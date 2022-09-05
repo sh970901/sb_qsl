@@ -10,6 +10,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class SiteUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
