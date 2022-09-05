@@ -1,20 +1,19 @@
-package com.example.qsl;
+package com.example.qsl.user.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+
 
 @Entity
 @Setter
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class SiteUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long Id;
+    private Long id;
 
     @Column(unique = true)
     private String username;
