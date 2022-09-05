@@ -7,12 +7,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
+//@Transactional을 붙이면 각 케이스테이블에 전부 @트Transactional 쓴 것과 동일
+//@Test+@Transactional 조합은 자동으로 롤백을 유발시킨다.
+@Transactional
 @ActiveProfiles("test") //테스트 모드 활성화
 class UserRepositoryTests {
 
