@@ -62,4 +62,14 @@ class UserRepositoryTests {
 		assertThat(count).isGreaterThan(0);
 	}
 
+	@Test
+	@DisplayName("가장 오래된 회원 수")
+	void t5(){
+		SiteUser u1 =  userRepository.getQslUserOrderByIdAscOne();
+		assertThat(u1.getId()).isEqualTo(1L);
+		assertThat(u1.getUsername()).isEqualTo("user1");
+		assertThat(u1.getEmail()).isEqualTo("user1@test.com");
+		assertThat(u1.getPassword()).isEqualTo("{noop}1234");
+	}
+
 }

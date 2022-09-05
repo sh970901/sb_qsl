@@ -5,4 +5,6 @@ import com.example.qsl.user.entity.SiteUser;
 public interface UserRepositoryCustom {
     SiteUser getQslUser(Long id);
     public long getQslCount();
+
+    SiteUser getQslUserOrderByIdAscOne();
 }
