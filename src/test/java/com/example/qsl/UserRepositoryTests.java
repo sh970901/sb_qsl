@@ -19,11 +19,11 @@ class UserRepositoryTests {
 	@Test
 	@DisplayName("회원 생성")
 	void t1() {
+
 		SiteUser u1 = new SiteUser(null, "user3", "{noop}1234","user3@test.com");
 		SiteUser u2 = new SiteUser(null, "user4", "{noop}1234","user4@test.com");
 		userRepository.saveAll(Arrays.asList(u1, u2));
 	}
-
 	@Test
 	@DisplayName("1번 회원을 Qsl로 가져오기")
 	void t2() {
