@@ -213,5 +213,29 @@ class UserRepositoryTests {
 		assertThat(u1.getPassword()).isEqualTo("{noop}1234");
 
 	}
+	@Test
+	@DisplayName("no qsl, 축구에 관심이 있는 회원들 검색")
+	void t12(){
+		List<SiteUser> users = userRepository.findByInterestKeywords_content("축구");
+		assertThat(users.size()).isEqualTo(1);
+
+		SiteUser u1 = users.get(0);
+
+		assertThat(u1.getId()).isEqualTo(1L);
+		assertThat(u1.getUsername()).isEqualTo("user1");
+		assertThat(u1.getEmail()).isEqualTo("user1@test.com");
+		assertThat(u1.getPassword()).isEqualTo("{noop}1234");
+
+	}
+	@Test
+	@DisplayName("u2= 아이돌, u1=팬 u1은 u2의 팔로워이다")
+	void t13(){
+		SiteUser u1 = userRepository.getQslUser(1L);
+		SiteUser u2 = userRepository.getQslUser(2L);
+
+		u1.follow(u2);
+
+		userRepository.save(u2);
+	}
 
 }
