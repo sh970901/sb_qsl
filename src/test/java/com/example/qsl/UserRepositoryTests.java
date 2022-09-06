@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,18 +30,18 @@ class UserRepositoryTests {
 
 	@Autowired
 	private UserRepository userRepository;
-	@Test
-	@DisplayName("회원 생성")
-	void t1() {
-
-		SiteUser u1 = new SiteUser(null, "user1", "{noop}1234","user1@test.com");
-		SiteUser u2 = SiteUser.builder()
-				.username("user2")
-				.password("{noop}1234")
-				.email("user2@test.com")
-				.build();
-		userRepository.saveAll(Arrays.asList(u1, u2));
-	}
+//	@Test
+//	@DisplayName("회원 생성")
+//	void t1() {
+//
+//		SiteUser u1 = new SiteUser(null, "user1", "{noop}1234","user1@test.com");
+//		SiteUser u2 = SiteUser.builder()
+//				.username("user2")
+//				.password("{noop}1234")
+//				.email("user2@test.com")
+//				.build();
+//		userRepository.saveAll(Arrays.asList(u1, u2));
+//	}
 	@Test
 	@DisplayName("1번 회원을 Qsl로 가져오기")
 	void t2() {
@@ -183,6 +184,21 @@ class UserRepositoryTests {
 		/*
 
 		 */
+	}
+	@Test
+	@DisplayName("회원에게 관심사를 등록할 수 있다.")
+	@Rollback(value = false)
+	void t10() {
+		SiteUser u2 = userRepository.getQslUser(1L);
+		u2.addInterestKeywordContent("축구");
+		u2.addInterestKeywordContent("롤");
+		u2.addInterestKeywordContent("헬스");
+		u2.addInterestKeywordContent("헬스"); //중복등록은 무시
+
+		userRepository.save(u2);
+		//엔티티 클래스 : InterestKeyword(interest_keyword 테이블)
+		//중간 테이블 생성되어야 함,ManyToMany
+		//interest_keyword 테이블에 축구, 롤, 헬스에 해당하는 row 3개 생성
 	}
 
 }
