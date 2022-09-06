@@ -29,8 +29,13 @@ public class TestInitData {
                     .password("{noop}1234")
                     .email("user2@test.com")
                     .build();
+            u1.addInterestKeywordContent("축구");
+            u1.addInterestKeywordContent("롤");
 
-            List<SiteUser> siteUsers = userRepository.saveAll(Arrays.asList(u1, u2));
+            u2.addInterestKeywordContent("클라이밍");
+            u2.addInterestKeywordContent("마라톤");
+
+            userRepository.saveAll(Arrays.asList(u1, u2));
         };
     }
 }

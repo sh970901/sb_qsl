@@ -187,7 +187,6 @@ class UserRepositoryTests {
 	}
 	@Test
 	@DisplayName("회원에게 관심사를 등록할 수 있다.")
-	@Rollback(value = false)
 	void t10() {
 		SiteUser u2 = userRepository.getQslUser(1L);
 		u2.addInterestKeywordContent("축구");
@@ -199,6 +198,20 @@ class UserRepositoryTests {
 		//엔티티 클래스 : InterestKeyword(interest_keyword 테이블)
 		//중간 테이블 생성되어야 함,ManyToMany
 		//interest_keyword 테이블에 축구, 롤, 헬스에 해당하는 row 3개 생성
+	}
+	@Test
+	@DisplayName("축구에 관심이 있는 회원들 검색")
+	void t11(){
+		List<SiteUser> users = userRepository.getQsUserByInterestKeyword("축구");
+		assertThat(users.size()).isEqualTo(1);
+
+		SiteUser u1 = users.get(0);
+
+		assertThat(u1.getId()).isEqualTo(1L);
+		assertThat(u1.getUsername()).isEqualTo("user1");
+		assertThat(u1.getEmail()).isEqualTo("user1@test.com");
+		assertThat(u1.getPassword()).isEqualTo("{noop}1234");
+
 	}
 
 }
