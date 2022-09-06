@@ -147,4 +147,42 @@ class UserRepositoryTests {
 		 */
 	}
 
+	@Test
+	@DisplayName("검색, Page 리턴, id DESC, pageSize=1, page=0;")
+	void t9(){
+		long totalCount = userRepository.count();
+		int pageSize=1; //한 페이지에 보여줄 아이템 개수
+		int totalPages = (int)Math.ceil(totalCount/(double)pageSize);
+		int page=1; //현재페이지
+		List<Sort.Order> sorts = new ArrayList<>();
+		sorts.add(Sort.Order.desc("id"));
+		Pageable pageable =PageRequest.of(page, pageSize, Sort.by(sorts)); // 한 페이지에 10까지 가능
+
+		Page<SiteUser> usersPage = userRepository.searchQsl("user", pageable);
+
+		assertThat(usersPage.getTotalPages()).isEqualTo(totalPages);
+		assertThat(usersPage.getNumber()).isEqualTo(page);
+		assertThat(usersPage.getNumber()).isEqualTo(pageSize);
+
+		List<SiteUser> users = usersPage.get().collect(Collectors.toList());
+
+		assertThat(users.size()).isEqualTo(pageSize);
+
+		SiteUser u1 = users.get(0);
+
+		assertThat(u1.getId()).isEqualTo(1L);
+		assertThat(u1.getUsername()).isEqualTo("user1");
+		assertThat(u1.getEmail()).isEqualTo("user1@test.com");
+		assertThat(u1.getPassword()).isEqualTo("{noop}1234");
+
+		// 검색어 : user1
+		// 한 페이지에 나올 수 있는 아이템 : 1개 pageable
+		// 현재 페이지 : 1 itemsInAPage
+		// 정렬: id역순 sorts
+
+		/*
+
+		 */
+	}
+
 }

@@ -1,12 +1,19 @@
 package com.example.qsl.user.repository;
 
 import com.example.qsl.user.entity.SiteUser;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.PathBuilder;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
+import java.util.function.LongSupplier;
 
 import static com.example.qsl.user.entity.QSiteUser.siteUser;
 
@@ -66,9 +73,34 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     }
 
     @Override
-    public Page<SiteUser> searchQsl(String user1, Pageable pageable) {
-        return null;
-    }
+    public Page<SiteUser> searchQsl(String kw, Pageable pageable) {
+        JPAQuery<SiteUser> usersQuery =  jpaQueryFactory
+                .select(siteUser)
+                .from(siteUser)
+                .where(
+                        siteUser.username.contains(kw)
+                                .or(siteUser.email.contains(kw))
+                )
+                .offset(pageable.getOffset()) //몇개를 건너 띄어야하는지 LIMIT {}, ? (앞에꺼)
+                .limit(pageable.getPageSize()); //한페이지에 몇개가 보여야 하는지 LIMIT ?, {} (뒤에꺼)
 
+        for (Sort.Order o : pageable.getSort()) {
+            PathBuilder pathBuilder = new PathBuilder(siteUser.getType(), siteUser.getMetadata());
+            usersQuery.orderBy(new OrderSpecifier(o.isAscending() ? Order.ASC : Order.DESC, pathBuilder.get(o.getProperty())));
+        }
+
+        List<SiteUser> users = usersQuery.fetch();
+
+        JPAQuery<Long> usersCountQuery = jpaQueryFactory
+                .select(siteUser.count())
+                .from(siteUser)
+                .where(
+                        siteUser.username.contains(kw)
+                                .or(siteUser.email.contains(kw))
+                );
+
+        return PageableExecutionUtils.getPage(users, pageable, usersCountQuery::fetchOne);
+        //전체갯수 쿼리하나, 현재페이지 쿼리하나, 입력받은 sort에 의해서 정렬되는 for문
+    }
 
 }
