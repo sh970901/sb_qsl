@@ -19,4 +19,6 @@ public interface UserRepositoryCustom {
     Page<SiteUser> searchQsl(String user1, org.springframework.data.domain.Pageable pageable);
 
     List<SiteUser> getQsUserByInterestKeyword(String keywordContent);
+
+    List<String> getKeywordContentByFollowingsOf(SiteUser u);
 }

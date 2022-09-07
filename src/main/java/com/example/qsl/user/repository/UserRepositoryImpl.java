@@ -1,6 +1,7 @@
 package com.example.qsl.user.repository;
 
 import com.example.qsl.interestKeyword.entity.QInterestKeyword;
+import com.example.qsl.user.entity.QSiteUser;
 import com.example.qsl.user.entity.SiteUser;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -125,6 +126,19 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 )
                 .fetch()
                 ;
+    }
+
+    @Override
+    public List<String> getKeywordContentByFollowingsOf(SiteUser user) {
+        QSiteUser siteUser2 = new QSiteUser("siteUser2");
+        return jpaQueryFactory
+                .select(interestKeyword.content)
+                .distinct()
+                .from(interestKeyword)
+                .innerJoin(interestKeyword.user, siteUser)
+                .innerJoin(siteUser.followers, siteUser2)
+                .where(siteUser2.id.eq(user.getId()))
+                .fetch();
     }
 
 }

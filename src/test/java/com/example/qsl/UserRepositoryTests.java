@@ -268,4 +268,27 @@ class UserRepositoryTests {
 		// u2가 구독중인 회원 : 0
 		assertThat(u2.getFollowings().size()).isEqualTo(0);
 	}
+
+	@Test
+	@DisplayName("u1은 더 이상 농구에 관심이 없습니다.")
+	void t16(){
+		SiteUser u1 = userRepository.getQslUser(1L);
+		u1.removeInterestKeywordContent("농구");
+		u1.removeInterestKeywordContent("축구");
+
+	}
+	@Test
+	@DisplayName("팔로우중인 사람들의 관심사")
+	void t17(){
+		SiteUser u = userRepository.getQslUser(8L);
+		List<String> keywordContents = userRepository.getKeywordContentByFollowingsOf(u);
+
+		assertThat(keywordContents.size()).isEqualTo(5);
+		u = userRepository.getQslUser(7L);
+		keywordContents = userRepository.getKeywordContentByFollowingsOf(u);
+
+		assertThat(keywordContents.size()).isEqualTo(4);
+
+
+	}
 }

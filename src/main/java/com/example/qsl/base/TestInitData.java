@@ -67,7 +67,28 @@ public class TestInitData {
             u2.addInterestKeywordContent("마라톤");
             u2.addInterestKeywordContent("농구");
 
-            userRepository.saveAll(Arrays.asList(u1,u2,u3,u4,u5,u6,u7,u8));
+            u3.addInterestKeywordContent("피아노");
+            u4.addInterestKeywordContent("바이롤린");
+            u5.addInterestKeywordContent("베이스");
+            u6.addInterestKeywordContent("기타");
+            u6.addInterestKeywordContent("베이스");
+            u7.addInterestKeywordContent("EDM");
+
+            userRepository.saveAll(Arrays.asList(u1,u2,u3,u4,u5,u6,u7,u8)); //PERSIST
+
+            u8.follow(u7);
+            u8.follow(u6);
+            u8.follow(u5);
+            u8.follow(u4);
+            u8.follow(u3);
+
+            u7.follow(u6);
+            u7.follow(u5);
+            u7.follow(u4);
+            u7.follow(u3);
+            u7.follow(u2);
+
+            userRepository.saveAll(Arrays.asList(u1,u2,u3,u4,u5,u6,u7,u8)); //MERGE
         };
     }
 }
