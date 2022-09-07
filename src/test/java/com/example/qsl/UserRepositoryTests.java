@@ -171,9 +171,9 @@ class UserRepositoryTests {
 
 		SiteUser u1 = users.get(0);
 
-		assertThat(u1.getId()).isEqualTo(1L);
-		assertThat(u1.getUsername()).isEqualTo("user1");
-		assertThat(u1.getEmail()).isEqualTo("user1@test.com");
+		assertThat(u1.getId()).isEqualTo(7L);
+		assertThat(u1.getUsername()).isEqualTo("user7");
+		assertThat(u1.getEmail()).isEqualTo("user7@test.com");
 		assertThat(u1.getPassword()).isEqualTo("{noop}1234");
 
 		// 검색어 : user1
@@ -243,5 +243,29 @@ class UserRepositoryTests {
 		SiteUser u1 = userRepository.getQslUser(1L);
 		u1.follow(u1);
 		assertThat(u1.getFollowers().size()).isEqualTo(0);
+	}
+
+	@Test
+	@DisplayName("특정회원의 follower들과 following들을 모두 알 수 있어야 한다.")
+	void t15(){
+		SiteUser u1 = userRepository.getQslUser(1L);
+		SiteUser u2 = userRepository.getQslUser(2L);
+		u1.follow(u2);
+
+		// follower
+		// u1의 구독자 : 0
+		assertThat(u1.getFollowers().size()).isEqualTo(0);
+
+		// follower
+		// u2의 구독자 : 1
+		assertThat(u2.getFollowers().size()).isEqualTo(1);
+
+		// following
+		// u1이 구독중인 회원 : 1
+		assertThat(u1.getFollowings().size()).isEqualTo(1);
+
+		// following
+		// u2가 구독중인 회원 : 0
+		assertThat(u2.getFollowings().size()).isEqualTo(0);
 	}
 }
